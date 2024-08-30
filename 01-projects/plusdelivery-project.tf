@@ -1,9 +1,10 @@
 resource "google_project" "plusdelivery_project_dev" {
   auto_create_network = false
+  org_id              = "${var.org_id}"
   billing_account     = "${var.billing_account}"
-  folder_id           = "${var.folder_plusdelivery_id}"
-  name                = "${var.plusdelivery_project_id}-${var.env}"
-  project_id          = "${var.plusdelivery_project_id}-${var.env}"
+  # folder_id           = "${var.folder_plusdelivery_id}"
+  name                = "${var.plusdelivery_project_id}-${var.env}-${random_id.name_suffix.hex}"
+  project_id          = "${var.plusdelivery_project_id}-${var.env}-${random_id.name_suffix.hex}"
   # deletion_policy = "DELETE"
 }
 

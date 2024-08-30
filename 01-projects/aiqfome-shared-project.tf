@@ -1,9 +1,10 @@
 resource "google_project" "aiqfome_shared_project_dev" {
   auto_create_network = false
+  org_id              = "${var.org_id}"
   billing_account     = "${var.billing_account}"
-  folder_id           = "${var.folder_shared_id}"
-  name                = "${var.aiqfome_shared_project_id}-${var.env}"
-  project_id          = "${var.aiqfome_shared_project_id}-${var.env}"
+  # folder_id           = "${var.folder_shared_id}"
+  name                = "${var.aiqfome_shared_project_id}-${var.env}-${random_id.name_suffix.hex}"
+  project_id          = "${var.aiqfome_shared_project_id}-${var.env}-${random_id.name_suffix.hex}"
   # deletion_policy = "DELETE"
 }
 

@@ -1,7 +1,10 @@
 ############################################
 # Credentials file for the service account #
 ############################################
-
+variable "org_id" {
+  description = "The organization ID"
+  type        = string
+}
 ###########################################
 # Declarate information to Project Create #
 ###########################################
