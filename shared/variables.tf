@@ -12,22 +12,22 @@ variable "billing_account" {
   description = "The billing account ID"
   type        = string
 }
-variable "folder_shared_id" {
-  description = "The ID of the shared network folder"
-  type        = string
-}
-variable "folder_aiqfome_id" {
-  description = "The ID of the app folder"
-  type        = string
-}
-variable "folder_aiqentrega_id" {
-  description = "The ID of the private folder"
-  type        = string
-}
-variable "folder_plusdelivery_id" {
-  description = "The ID of the DMZ folder"
-  type        = string
-}
+# variable "folder_shared_id" {
+#   description = "The ID of the shared network folder"
+#   type        = string
+# }
+# variable "folder_aiqfome_id" {
+#   description = "The ID of the app folder"
+#   type        = string
+# }
+# variable "folder_aiqentrega_id" {
+#   description = "The ID of the private folder"
+#   type        = string
+# }
+# variable "folder_plusdelivery_id" {
+#   description = "The ID of the DMZ folder"
+#   type        = string
+# }
 ########################
 # Define Enviroment ID #
 ########################
