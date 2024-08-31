@@ -1,0 +1,102 @@
+{
+    "network": {
+        "network": {
+            "auto_create_subnetworks": false,
+            "delete_default_routes_on_create": false,
+            "description": "",
+            "enable_ula_internal_ipv6": false,
+            "gateway_ipv4": "",
+            "id": "projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+            "internal_ipv6_range": "",
+            "mtu": 0,
+            "name": "aiqfome-cluster-vpc-dev",
+            "network_firewall_policy_enforcement_order": "AFTER_CLASSIC_FIREWALL",
+            "numeric_id": "2789640210273408050",
+            "project": "aiqfome-host-project-dev-0ac5",
+            "routing_mode": "GLOBAL",
+            "self_link": "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+            "timeouts": null
+        },
+        "network_id": "projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+        "network_name": "aiqfome-cluster-vpc-dev",
+        "network_self_link": "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+        "project_id": "aiqfome-host-project-dev-0ac5"
+    },
+    "network_id": "projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+    "network_name": "aiqfome-cluster-vpc-dev",
+    "network_self_link": "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+    "project_id": "aiqfome-host-project-dev-0ac5",
+    "route_names": [
+        "egress-internet"
+    ],
+    "subnets": {
+        "us-central1/aiqfome-cluster-vpc-subnet-dev": {
+            "creation_timestamp": "2024-08-31T16:44:41.626-07:00",
+            "description": "",
+            "external_ipv6_prefix": "",
+            "fingerprint": null,
+            "gateway_address": "10.64.0.1",
+            "id": "projects/aiqfome-host-project-dev-0ac5/regions/us-central1/subnetworks/aiqfome-cluster-vpc-subnet-dev",
+            "internal_ipv6_prefix": "",
+            "ip_cidr_range": "10.64.0.0/20",
+            "ipv6_access_type": "",
+            "ipv6_cidr_range": "",
+            "log_config": [],
+            "name": "aiqfome-cluster-vpc-subnet-dev",
+            "network": "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/global/networks/aiqfome-cluster-vpc-dev",
+            "private_ip_google_access": false,
+            "private_ipv6_google_access": "DISABLE_GOOGLE_ACCESS",
+            "project": "aiqfome-host-project-dev-0ac5",
+            "purpose": "PRIVATE",
+            "region": "us-central1",
+            "role": "",
+            "secondary_ip_range": [
+                {
+                    "ip_cidr_range": "10.64.32.0/20",
+                    "range_name": "pod-ranges"
+                },
+                {
+                    "ip_cidr_range": "10.64.16.0/20",
+                    "range_name": "services-range"
+                }
+            ],
+            "self_link": "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/regions/us-central1/subnetworks/aiqfome-cluster-vpc-subnet-dev",
+            "send_secondary_ip_range_if_empty": null,
+            "stack_type": "IPV4_ONLY",
+            "timeouts": null
+        }
+    },
+    "subnets_flow_logs": [
+        false
+    ],
+    "subnets_ids": [
+        "projects/aiqfome-host-project-dev-0ac5/regions/us-central1/subnetworks/aiqfome-cluster-vpc-subnet-dev"
+    ],
+    "subnets_ips": [
+        "10.64.0.0/20"
+    ],
+    "subnets_names": [
+        "aiqfome-cluster-vpc-subnet-dev"
+    ],
+    "subnets_private_access": [
+        false
+    ],
+    "subnets_regions": [
+        "us-central1"
+    ],
+    "subnets_secondary_ranges": [
+        [
+            {
+                "ip_cidr_range": "10.64.32.0/20",
+                "range_name": "pod-ranges"
+            },
+            {
+                "ip_cidr_range": "10.64.16.0/20",
+                "range_name": "services-range"
+            }
+        ]
+    ],
+    "subnets_self_links": [
+        "https://www.googleapis.com/compute/v1/projects/aiqfome-host-project-dev-0ac5/regions/us-central1/subnetworks/aiqfome-cluster-vpc-subnet-dev"
+    ]
+}
