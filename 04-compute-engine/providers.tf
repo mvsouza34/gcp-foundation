@@ -24,9 +24,9 @@ locals {
     subnets = jsondecode(file("../local/subnet.json"))
     # aiqfome_cluster_vpc = jsondecode(file("../local/aiqfome_cluster_vpc.json"))
     # Private Services Network
-    aiqfome_psn = jsondecode(file("../local/aiqfome_psn.json"))
+    # aiqfome_psn = jsondecode(file("../local/aiqfome_psn.json"))
     # CloudSQL Instance
-    aiqfome_sql_instance = jsondecode(file("../local/aiqfome_sql_instance.json"))
+    # aiqfome_sql_instance = jsondecode(file("../local/aiqfome_sql_instance.json"))
 }
 
 # Configure the Google Cloud Provider
