@@ -14,7 +14,20 @@ module "vpc" {
         }
     ]
 
-    
+    secondary_ranges = {
+        subnet-service = [
+            {
+                range_name = "services-range"
+                ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_services}"
+            }
+        ]
+        subnet-pods = [
+            {
+                range_name = "pod-ranges"
+                ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_pods}"
+            }
+        ]
+    }
 
     routes = [
         {
