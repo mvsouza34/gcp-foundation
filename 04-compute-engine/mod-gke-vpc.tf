@@ -27,6 +27,9 @@ module "vpc" {
             },
         ]
     }
+    
+
+
 
 
     #     {
@@ -76,4 +79,20 @@ module "vpc" {
         #     next_hop_instance_zone = "us-west1-a"
         # },
     ]
+}
+
+output "aiqfome_cluster_vpc" {
+    value = "module.vpc.network_name"
+}
+output "subnet_aiqfome_cluster" {
+    value = "module.vpc.subnets[0].subnet_name"
+}
+output "subnet_cidr_cluster_range_primary" {
+    value = "module.vpc.subnets[0].name"
+}
+output "subnet_cidr_cluster_range_secondary_services" {
+    value = "module.vpc.secondary_ranges.subnet-01[0].range_name"
+}
+output "subnet_cidr_cluster_range_secondary_pods" {
+    value = "module.vpc.secondary_ranges.subnet-02[0].range_name"
 }
