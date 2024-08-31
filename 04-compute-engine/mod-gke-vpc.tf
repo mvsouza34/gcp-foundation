@@ -54,7 +54,13 @@ output "subnet_cidr_cluster_range_secondary_pods" {
     value = "module.vpc.secondary_ranges.subnet-02[0].range_name"
 }
 
-resource "local_file" "aiqfome_cluster_vpc" {
-    content  = module.vpc.network_name
-    filename = "${path.module}/aiqfome_cluster_vpc.txt"
+# Create a output to use in other modules
+output "vpc_self_link" {
+    value = module.vpc.network_self_link
+}
+
+# Create a JSON output file to use in other modules
+resource "local_file" "vpc" {
+    content  = jsonencode(module.vpc)
+    filename = "../local/outputs_vpc.json"
 }
