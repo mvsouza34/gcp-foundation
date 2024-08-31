@@ -8,27 +8,24 @@ module "vpc" {
 
     subnets = [
         {
-            subnet_name           = "${var.network_cluster_name}"
+            subnet_name           = "${var.network_cluster_name}-subnet-${var.env}"
             subnet_ip             = "${var.subnet_cidr_cluster_range_primary}"
             subnet_region         = "${var.region_id}"
         }
     ]
-
     secondary_ranges = {
-        subnet-service = [
+        "${var.network_cluster_name}-subnet-${var.env}" = [
             {
                 range_name = "services-range"
                 ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_services}"
-            }
-        ]
-        subnet-pods = [
+            },
             {
                 range_name = "pod-ranges"
                 ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_pods}"
             }
-        ]
+        ]         
     }
-
+   
     routes = [
         {
             name                   = "egress-internet"
@@ -66,3 +63,4 @@ resource "local_file" "vpc" {
     content  = jsonencode(module.vpc)
     filename = "../local/outputs_vpc.json"
 }
+
