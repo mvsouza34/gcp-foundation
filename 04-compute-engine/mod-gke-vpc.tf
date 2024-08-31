@@ -11,19 +11,24 @@ module "vpc" {
             subnet_name           = "${var.network_cluster_name}"
             subnet_ip             = "${var.subnet_cidr_cluster_range_primary}"
             subnet_region         = "${var.region_id}"
-        # Declare the secondary ranges for the subnet
-            secondary_ranges = [
-                {
-                    range_name    = "services-range"
-                    ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_services}"
-                },
-                {
-                    range_name    = "pod-ranges"
-                    ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_pods}"
-                }
-            ]
+        
         }
     ]
+
+    # Declare the secondary ranges for the subnet
+    secondary_ranges = [
+        {
+            range_name    = "services-range"
+            subnet_name   = "${var.network_cluster_name}"
+            ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_services}"
+        },
+        {
+            range_name    = "pod-ranges"
+            subnet_name   = "${var.network_cluster_name}"
+            ip_cidr_range = "${var.subnet_cidr_cluster_range_secondary_pods}"
+        }
+    ]
+
     routes = [
         {
             name                   = "egress-internet"
