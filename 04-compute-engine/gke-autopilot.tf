@@ -1,42 +1,41 @@
-# ###################################
-# # Create a Auto Pilot GKE Cluster #
-# ###################################
+###################################
+# Create a Auto Pilot GKE Cluster #
+###################################
 
-# # # google_client_config and kubernetes provider must be explicitly specified like the following.
-# # data "google_client_config" "default" {}
+# # google_client_config and kubernetes provider must be explicitly specified like the following.
+# data "google_client_config" "default" {}
 
-# # provider "kubernetes" {
-# #   host                   = "https://${module.gke.endpoint}"
-# #   token                  = data.google_client_config.default.access_token
-# #   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-# # }
-
-# module "kubernetes_engine_beta_autopilot_public_cluster" {
-#   source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
-#   # version = "27.0.0"
-#   name                       = "${var.aiqfome_shared_project_id}-cluster-${var.env}"
-#   project_id                 = local.aiqfome_shared_project.aiqfome_shared_project_name
-#   region                     = "${var.region_id}"
-#   # zones                      = ["us-central1-a", "us-central1-b", "us-central1-f"]
-#   network                    = google_compute_network.aiqfome_cluster_vpc_network.name
-#   subnetwork                 = google_compute_subnetwork.subnet_aiqfome_cluster_dev.name
-#   ip_range_services          = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[0].range_name
-#   ip_range_pods              = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[1].range_name
-#   horizontal_pod_autoscaling = true
-#   # filestore_csi_driver       = false
-#   dns_cache                  = false
-  
-#   grant_registry_access = true
-#   create_service_account = true
-
-
-# depends_on = [
-#   google_compute_network.aiqfome_cluster_vpc_network,
-#   google_compute_subnetwork.subnet_aiqfome_cluster_dev,
-#   google_compute_subnetwork.subnet_aiqfome_cluster_dev
-#     ]
-
+# provider "kubernetes" {
+#   host                   = "https://${module.gke.endpoint}"
+#   token                  = data.google_client_config.default.access_token
+#   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
 # }
+
+module "kubernetes_engine_beta_autopilot_public_cluster" {
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
+  # version = "27.0.0"
+  name                       = "${var.aiqfome_shared_project_id}-cluster-${var.env}"
+  project_id                 = local.aiqfome_shared_project.aiqfome_shared_project_name
+  region                     = "${var.region_id}"
+  # zones                      = ["us-central1-a", "us-central1-b", "us-central1-f"]
+  network                    = module.vpc.network_name
+  subnetwork                 = module.vpc.subnets.subnet_name
+  ip_range_services          = module.vpc.secondary_ip_range[0].range_name
+  ip_range_pods              = module.vpc.secondary_ip_range[1].range_name
+  horizontal_pod_autoscaling = true
+  # filestore_csi_driver       = false
+  dns_cache                  = false
+  
+  grant_registry_access = true
+  create_service_account = true
+
+
+depends_on = [
+  module.vpc.network_name,
+  module.vpc.subnets
+    ]
+
+}
 
 
 # # # ########################
