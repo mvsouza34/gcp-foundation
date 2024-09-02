@@ -1,81 +1,74 @@
-# ##############################################
-# # Create a Network to Cluster VPC and Subnet #
-# ##############################################
-# # Create a Network to Cluster VPC
-# resource "google_compute_network" "aiqfome_cluster_vpc_network" {
-#     name = "${var.network_cluster_name}-${var.env}"
-#     project = local.aiqfome_host_project.host_project_name
-#     region = var.region_id
+################################
+# Create a VPC Network for GKE #
+################################
+resource "google_compute_network" "gke_vpc_network" {
+    name = "gke-vpc-network"
+    project = local.aiqfome_shared_project.aiqfome_shared_project_name
+    # project = local.aiqfome_host_project.host_project_name
 
-#     auto_create_subnetworks  = false
-#     # routing_mode             = "GLOBAL"
-# }
+    auto_create_subnetworks  = false
+    enable_ula_internal_ipv6 = true
+}
 
-# # Create a Subnet to Cluster VPC and Subnet to use in GKE Autopilot
-# resource "google_compute_subnetwork" "subnet_aiqfome_control_cluster_dev" {
-#     name = "${var.subnet_cluster_service}-control-${var.env}"
-#     project = local.aiqfome_host_project.host_project_name
-#     region = var.region_id
-#     network = google_compute_network.aiqfome_cluster_vpc_network.self_link
+###################################
+# Create a VPC Subnetwork for GKE #
+###################################
+resource "google_compute_subnetwork" "gke_vpc_subnet" {
+    name = "gke-vpc-subnet"
+    project = local.aiqfome_shared_project.aiqfome_shared_project_name
+    # project = local.aiqfome_host_project.host_project_name
 
-#     ip_cidr_range = var.subnet_cidr_cluster_range_control
-  
-# }
+    ip_cidr_range = var.subnet_cidr_cluster_range_primary
+    region        = var.region_id
 
-# resource "google_compute_subnetwork" "subnet_aiqfome_cluster_dev" {
-#     name    = "${var.subnet_cluster_service}-${var.env}"
-#     project = local.aiqfome_host_project.host_project_name
-#     region  = var.region_id
-#     network = google_compute_network.aiqfome_cluster_vpc_network.self_link
+    stack_type       = "IPV4_IPV6"
+    ipv6_access_type = "INTERNAL" # Change to "EXTERNAL" if creating an external loadbalancer
 
-#     ip_cidr_range = var.subnet_cidr_cluster_range_primary
+    network = google_compute_network.gke_vpc_network.id
+    secondary_ip_range {
+        range_name    = "services-range"
+        ip_cidr_range = var.subnet_cidr_cluster_range_secondary_services
+    }
 
-#     secondary_ip_range {
-#         range_name    = "services-range"
-#         ip_cidr_range = var.subnet_cidr_cluster_range_secondary_services
-#     }
-#     secondary_ip_range {
-#         range_name    = "pod-ranges"
-#         ip_cidr_range = var.subnet_cidr_cluster_range_secondary_pods
-#     }
-# }
+    secondary_ip_range {
+        range_name    = "pod-ranges"
+        ip_cidr_range = var.subnet_cidr_cluster_range_secondary_pods
+    }
+}
 
-# ################################################
-# # Attach the Shared VPN in the Service Project #
-# ################################################
-# # Attach the Shared VPN in the Service Project
+# #########################################
+# # Create a Shared VPC to Shared Project #
+# #########################################
 # resource "google_compute_shared_vpc_service_project" "aiqfome_shared_project" {
-#     host_project = local.aiqfome_host_project.host_project_name
+#     host_project    = local.aiqfome_host_project.host_project_name
 #     service_project = local.aiqfome_shared_project.aiqfome_shared_project_name
 # }
 
-# ###################################
-# # Outputs to use in other modules #
-# ###################################
-# output "aiqfome_cluster_vpc" {
-#     value = google_compute_network.aiqfome_cluster_vpc_network.self_link
-# }
-# output "subnet_aiqfome_cluster" {
-#     value = google_compute_subnetwork.subnet_aiqfome_cluster_dev.self_link
-# }
-# output "subnet_cidr_cluster_range_primary" {
-#     value = google_compute_subnetwork.subnet_aiqfome_cluster_dev.name
-# }
-# output "subnet_cidr_cluster_range_secondary_services" {
-#     value = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[0].range_name
-# }
-# output "subnet_cidr_cluster_range_secondary_pods" {
-#     value = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[1].range_name
-# }
+# #######################################
+# # Create a Peering to AiQFome Project #
+# #######################################
+resource "google_compute_network_peering" "perring_aiqfome_to_cluster" {
+    name         = "peering-aiqfome-to-cluster"
+    network      = google_compute_network.gke_vpc_network.self_link
+    peer_network = local.shared_vpcs.aiqfome_vpc_self_link
+    
+    stack_type = "IPV4_IPV6"
 
-# resource "local_file" "aiqfome_cluster_vpc" {
-#     content = jsonencode({
-#         aiqfome_cluster_vpc = google_compute_network.aiqfome_cluster_vpc_network.self_link
-#         subnet_aiqfome_cluster = google_compute_subnetwork.subnet_aiqfome_cluster_dev.self_link
-#         subnet_cidr_cluster_range_primary = google_compute_subnetwork.subnet_aiqfome_cluster_dev.ip_cidr_range
-#         subnet_cidr_cluster_range_secondary_services = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[0].ip_cidr_range
-#         subnet_cidr_cluster_range_secondary_pods = google_compute_subnetwork.subnet_aiqfome_cluster_dev.secondary_ip_range[1].ip_cidr_range
-#     })
-#     filename = "../local/aiqfome_cluster_vpc.json"
+    import_custom_routes = true
+    export_custom_routes = true
+    import_subnet_routes_with_public_ip = true
+    export_subnet_routes_with_public_ip = true
+}
+
+resource "google_compute_network_peering" "peering_cluster_to_aiqfome" {
+    name         = "peering-cluster-to-aiqfome"
+    network      = local.shared_vpcs.aiqfome_vpc_self_link
+    peer_network = google_compute_network.gke_vpc_network.self_link
   
-# }
+    stack_type = "IPV4_IPV6"
+
+    import_custom_routes = true
+    export_custom_routes = true
+    import_subnet_routes_with_public_ip = true
+    export_subnet_routes_with_public_ip = true
+}
