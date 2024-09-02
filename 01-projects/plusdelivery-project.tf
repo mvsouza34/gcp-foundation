@@ -6,7 +6,7 @@ resource "google_project" "plusdelivery_project_dev" {
   # folder_id           = "${var.folder_plusdelivery_id}"
   name                = "${var.plusdelivery_project_id}-${var.env}-${random_id.name_suffix.hex}"
   project_id          = "${var.plusdelivery_project_id}-${var.env}-${random_id.name_suffix.hex}"
-  # deletion_policy = "DELETE"
+  deletion_policy = "DELETE"
 }
 
 output "plusdelivery_project_id" {

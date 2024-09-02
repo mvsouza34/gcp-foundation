@@ -6,7 +6,7 @@ resource "google_project" "aiqentrega_project_dev" {
   # folder_id           = "${var.folder_aiqentrega_id}"
   name                = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"
   project_id          = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"
-  # deletion_policy = "DELETE"
+  deletion_policy = "DELETE"
 }
 
 output "aiqentrega_project_id" {
