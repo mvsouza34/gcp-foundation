@@ -1,7 +1,8 @@
 resource "google_project" "aiqentrega_project_dev" {
   auto_create_network = false
-  org_id              = "${var.org_id}"
+  # org_id              = "${var.org_id}"
   billing_account     = "${var.billing_account}"
+  folder_id = "351671931898"
   # folder_id           = "${var.folder_aiqentrega_id}"
   name                = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"
   project_id          = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"

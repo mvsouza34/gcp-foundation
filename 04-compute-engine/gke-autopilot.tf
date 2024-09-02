@@ -1,41 +1,125 @@
-###################################
-# Create a Auto Pilot GKE Cluster #
-###################################
+module "gke-cluster-autopilot-2" {
+  source          = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/gke-cluster-autopilot?ref=v26.0.0"
+  project_id      = local.aiqfome_shared_project.aiqfome_shared_project_name
+  name            = "${var.aiqfome_shared_project_id}-cluster-${var.env}"
+  location        = "${var.region_id}"
+  release_channel = "STABLE"
+  node_locations  = [var.zone_01_id]
 
-# # google_client_config and kubernetes provider must be explicitly specified like the following.
-# data "google_client_config" "default" {}
+  vpc_config = {
+    network                = "aiqfome-cluster-vpc-dev"
+    subnetwork             = "aiqfome-cluster-vpc-subnet-dev"
+    # master_ipv4_cidr_block = "10.253.144.16/28" # 10.253.144.16 - 10.253.144.31
+    master_ipv4_cidr_block = local.gke_vpc.subnets_ips
+    secondary_range_names = {
+      pods     = "pods"
+      services = "services"
+    }
+  }
 
-# provider "kubernetes" {
-#   host                   = "https://${module.gke.endpoint}"
-#   token                  = data.google_client_config.default.access_token
-#   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-# }
+  logging_config = {
+    enable_system_logs             = true
+    enable_workloads_logs          = true
+    enable_api_server_logs         = false
+    enable_scheduler_logs          = true
+    enable_controller_manager_logs = false
+  }
 
-module "kubernetes_engine_beta_autopilot_public_cluster" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
-  # version = "27.0.0"
-  name                       = "${var.aiqfome_shared_project_id}-cluster-${var.env}"
-  project_id                 = local.aiqfome_shared_project.aiqfome_shared_project_name
-  region                     = "${var.region_id}"
-  # zones                      = ["us-central1-a", "us-central1-b", "us-central1-f"]
-  network                    = module.vpc.network_name
-  subnetwork                 = module.vpc.subnets.subnet_name
-  ip_range_services          = module.vpc.secondary_ip_range[0].range_name
-  ip_range_pods              = module.vpc.secondary_ip_range[1].range_name
-  horizontal_pod_autoscaling = true
-  # filestore_csi_driver       = false
-  dns_cache                  = false
-  
-  grant_registry_access = true
-  create_service_account = true
+  monitoring_config = {
+    enable_daemonset_metrics   = true
+    enable_deployment_metrics  = true
+    enable_hpa_metrics         = true
+    enable_pod_metrics         = true
+    enable_statefulset_metrics = true
+    enable_storage_metrics     = true
+  }
 
+  enable_addons = {
+    cloudrun         = false
+    config_connector = false # Must be false to autopilot
+    horizontal_pod_autoscaling = true # Required by autopilot
+    http_load_balancing = true # Required by autopilot
+  }
 
-depends_on = [
-  module.vpc.network_name,
-  module.vpc.subnets
-    ]
+  enable_features = {
+    binary_authorization     = false
+    vertical_pod_autoscaling = true
+    dns = {
+      provider = "CLOUD_DNS"
+      scope    = "CLUSTER_SCOPE"
+      domain   = "gke.local"
+    }
+  }
+
+  # labels = {
+  #   environment = var.vars.environment.full
+  # }
+
+  private_cluster_config = {
+    enable_private_endpoint = false
+    master_global_access    = false
+  }
+
+  # tags = ["gke-cluster-1", var.vars.environment.full]
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ###################################
+# # Create a Auto Pilot GKE Cluster #
+# ###################################
+
+# # # google_client_config and kubernetes provider must be explicitly specified like the following.
+# # data "google_client_config" "default" {}
+
+# # provider "kubernetes" {
+# #   host                   = "https://${module.gke.endpoint}"
+# #   token                  = data.google_client_config.default.access_token
+# #   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+# # }
+
+# module "kubernetes_engine_beta_autopilot_public_cluster" {
+#   source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
+#   # version = "27.0.0"
+#   name                       = "${var.aiqfome_shared_project_id}-cluster-${var.env}"
+#   project_id                 = local.aiqfome_shared_project.aiqfome_shared_project_name
+#   region                     = "${var.region_id}"
+#   # zones                      = ["us-central1-a", "us-central1-b", "us-central1-f"]
+#   network                    = local.gke_vpc.network_name
+#   subnetwork                 = "aiqfome-cluster-vpc-dev"
+#   ip_range_services          = "services-range"
+#   ip_range_pods              = "pod-ranges"
+#   horizontal_pod_autoscaling = true
+#   # filestore_csi_driver       = false
+#   dns_cache                  = false
+  
+#   grant_registry_access = true
+#   create_service_account = true
+
+
+# # depends_on = [
+# #   network_name,
+# #   module.vpc.subnets
+# #     ]
+
+# }
 
 
 # # # ########################

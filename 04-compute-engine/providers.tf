@@ -22,6 +22,7 @@ locals {
     shared_vpcs = jsondecode(file("../local/shared_vpcs.json"))
     # Subnets
     subnets = jsondecode(file("../local/subnet.json"))
+    gke_vpc = jsondecode(file("../local/gke_vpc.json"))
     # aiqfome_cluster_vpc = jsondecode(file("../local/aiqfome_cluster_vpc.json"))
     # Private Services Network
     # aiqfome_psn = jsondecode(file("../local/aiqfome_psn.json"))

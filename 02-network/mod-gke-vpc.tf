@@ -61,11 +61,13 @@ output "vpc_self_link" {
 # Create a JSON output file to use in other modules
 resource "local_file" "vpc" {
     content  = jsonencode(module.vpc)
-    filename = "../local/outputs_vpc.json"
+    filename = "../local/gke_vpc.json"
 }
 
 # Attach the Shared VPN in the Service Project 
 resource "google_compute_shared_vpc_service_project" "aiqfome_shared_project" {
     host_project    = local.aiqfome_host_project.host_project_name
     service_project = local.aiqfome_shared_project.aiqfome_shared_project_name
+
+    depends_on = [ module.vpc ]
 }

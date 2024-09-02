@@ -45,10 +45,10 @@ linux_image = "cos-cloud/cos-stable"
 ################################################
 # Define the region and zone for the resources #
 ################################################
-region_id = "us-central1"
-zone_01_id = "us-central1-a"
-zone_02_id = "us-central1-b"
-zone_03_id = "us-central1-f"
+region_id = "us-east1"
+zone_01_id = "us-east1-a"
+zone_02_id = "us-east1-b"
+zone_03_id = "us-east1-c"
 # zone_02_id = "us-central1-b"
 # zone_03_id = "us-central1-c"
 
@@ -71,8 +71,8 @@ subnet_cluster_service = "aiqfome-cluster-subnet"
 # Cluster subnets CIDR
 subnet_cidr_cluster_range_control = "10.64.48.0/28"
 subnet_cidr_cluster_range_primary = "10.64.0.0/20"
-subnet_cidr_cluster_range_secondary_services = "10.64.16.0/20"
-subnet_cidr_cluster_range_secondary_pods = "10.64.32.0/20"
+subnet_cidr_cluster_range_secondary_services = "172.17.0.0/17"
+subnet_cidr_cluster_range_secondary_pods = "172.16.0.0/17"
 ############################################################################
 # # Cluster Private Connection subnet CIDR
 # subnet_cidr_cluster_private_ip_address = "10.64.64.0" # Private IP Address to Private Connetion
