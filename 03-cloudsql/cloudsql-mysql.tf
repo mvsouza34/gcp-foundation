@@ -1,33 +1,27 @@
-# # # # Create a resource CloudSQL instance in prv project and connect it to the shared VPC network.
-resource "google_sql_database_instance" "aiqfome_sql_instance_dev" {
-    provider = google-beta
+resource "google_sql_database_instance" "service_postgres_instance" {
+  provider = google-beta
+  project = "${var.service_project_id}"
 
-    name = "${var.aiqfome_project_id}-private-instance-${var.env}"	
-    region = var.region_id
-    database_version = "MYSQL_8_0"
+  name             = "${var.service_project_id}-cloudsql-instance-01"
+  region           = var.region_id
+  database_version = "POSTGRES_12"
 
-    project = local.aiqfome_project.aiqfome_project_name
+  settings {
+    tier = "db-f1-micro"
+    ip_configuration {
+      ipv4_enabled                                  = true
+      allocated_ip_range                            = local.network.service_project_private_ip_address.name
 
-    # depends_on = [ local.private_services_network.aiqfome_private_services_network_dev ]
+      private_network                               = local.network.service_private_vpc_connection.network
+      enable_private_path_for_google_cloud_services = true
 
-    settings {
-      tier = "db-f1-micro"
-      ip_configuration {
-        ipv4_enabled = false
-        # private_network = google_compute_network.aiqfome_pvt_private_network_dev.self_link
-        private_network = google_service_networking_connection.private_vpc_connection_dev.network
-        enable_private_path_for_google_cloud_services = true
+      authorized_networks {
+        name = "carlokos-vpn-br"
+        value = "129.148.29.13/32"
       }
     }
-}
+  }
 
-output "aiqfome_sql_instance" {
-    value = google_sql_database_instance.aiqfome_sql_instance_dev.name
-}
+  # depends_on = [ local.network.service_private_vpc_connection ]
 
-resource "local_file" "aiqfome_sql_instance" {
-    content = jsonencode({
-        aiqfome_sql_instance = google_sql_database_instance.aiqfome_sql_instance_dev.name
-    })
-    filename = "../local/aiqfome_sql_instance.json"
 }

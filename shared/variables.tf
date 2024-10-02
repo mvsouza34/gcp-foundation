@@ -88,6 +88,10 @@ variable "service_vpc_name" {
   description = "The name of the network"
   type        = string
 }
+variable "application_vpc_name" {
+  description = "The name of the network"
+  type        = string
+}
 #############################
 # Default Project CIRDs #
 variable "subnet_cidr_service_range" {
@@ -100,8 +104,12 @@ variable "subnet_cidr_application_range" {
 }
 ################################################################################
 # Cluster subnets
-variable "subnet_cluster_service" {
+variable "subnet_cluster_name" {
   description = "The name of the service subnet"
+  type        = string
+}
+variable "subnet_cidr_environment" {
+  description = "The CIDR of the service subnet"
   type        = string
 }
 ############################################################################
@@ -122,14 +130,18 @@ variable "subnet_cidr_cluster_range_secondary_pods" {
   description = "The Secondary CIDR to Cluster"
   type = string
 }
+variable "subnet_cidr_cluster_range_redis" {
+  description = "The CIDR of the service subnet"
+  type        = string
+}
 ############################################################################
 # Cluster Private Connection subnet CIDR
-variable "subnet_cidr_cluster_private_ip_address" {
+variable "subnet_cidr_private_ip_address" {
   description = "The CIDR of the private IP address"
   type        = string
 }
 # Private Connection subnet mask length
-variable "ip_mask_length_cluster_private_ip_address" {
+variable "ip_mask_length_private_ip_address" {
   description = "The mask length of the private IP address"
   type        = string
 }

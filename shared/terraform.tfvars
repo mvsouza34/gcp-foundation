@@ -44,8 +44,6 @@ region_id = "us-central1"
 zone_01_id = "us-central1-a"
 zone_02_id = "us-central1-b"
 zone_03_id = "us-central1-f"
-# zone_02_id = "us-central1-b"
-# zone_03_id = "us-central1-c"
 
 ########################################
 # Define the network and subnets names #
@@ -55,23 +53,26 @@ zone_03_id = "us-central1-f"
 #######################
 # Cluster VPC Network #
 #######################
-# Cluster network
-service_vpc_name = "service-cluster-vpc"
+service_vpc_name = "service-vpc"
+application_vpc_name = "application-vpc"
 ################################################################################
 # Default Project CIRDs #
-subnet_cidr_service_range = "value"
-subnet_cidr_application_range = "value"
+subnet_cidr_service_range = "10.192.0.0/20"
+subnet_cidr_application_range = "10.192.16.0/20"
 ################################################################################
 # Cluster subnets
-subnet_cluster_service = "subnet-cluster-subnet"
+subnet_cluster_name = "cluster-vpc"
+subnet_cidr_environment = "10.192.0.0/10"
 ################################################################################
 # Cluster subnets CIDR
-subnet_cidr_cluster_range_control = "10.64.48.0/28"
-subnet_cidr_cluster_range_primary = "10.64.0.0/20"
-subnet_cidr_cluster_range_secondary_services = "10.64.16.0/20"
-subnet_cidr_cluster_range_secondary_pods = "10.64.32.0/20"
+subnet_cidr_cluster_range_primary            = "10.192.48.0/20"
+subnet_cidr_cluster_range_secondary_services = "10.192.64.0/20"
+subnet_cidr_cluster_range_secondary_pods     = "10.192.80.0/20"
+# Cluster subnets CIDR /28 Break 10.192.48.0/20 in /28 https://jodies.de/ipcalc?host=10.192.48.0&mask1=20&mask2=28
+subnet_cidr_cluster_range_control            = "10.192.96.0/28"
+subnet_cidr_cluster_range_redis              = "10.192.96.16/28"
 ############################################################################
 # Cluster Private Connection subnet CIDR
-subnet_cidr_cluster_private_ip_address = "10.64.64.0" # Private IP Address to Private Connetion
+subnet_cidr_private_ip_address = "10.192.32.0" # Private IP Address to Private Connetion
 # Cluster Private Connection subnet mask length
-ip_mask_length_cluster_private_ip_address = "20"
+ip_mask_length_private_ip_address = "20"

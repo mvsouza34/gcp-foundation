@@ -9,9 +9,9 @@ resource "local_file" "export_subnet" {
       number = google_project.host_project.number,
       }
     service_project = {
-      name = google_project.aiqentrega_project_dev.name,
-      id = google_project.aiqentrega_project_dev.id,
-      number = google_project.aiqentrega_project_dev.number,
+      name = google_project.service_project.name,
+      id = google_project.service_project.id,
+      number = google_project.service_project.number,
       }
   })
     filename = "../01_projects.json"

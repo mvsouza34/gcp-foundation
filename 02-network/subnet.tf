@@ -2,103 +2,66 @@
 # Create a Private subnet in the AiQFome VPC Network #
 ######################################################
 # # Create a google vpc subnet
-resource "google_compute_subnetwork" "subnet_aiqfome_services_dev" {
-    name          = "${var.subnet_aiqfome_service}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_aiqfome_range_service}"
-    network       = google_compute_network.vpc_network_aiqfome_dev.self_link
+resource "google_compute_subnetwork" "subnet_services" {
+    name          = "${var.service_project_id}-${var.service_vpc_name}-${var.env}"
+    project       = "${var.host_project_id}"
+    ip_cidr_range = "${var.subnet_cidr_service_range}"
+    network       = google_compute_network.vpc_shared_network.self_link
     region        = "${var.region_id}"
 
-  depends_on = [ google_compute_network.vpc_network_aiqfome_dev ]
+  depends_on = [ google_compute_network.vpc_shared_network ]
 }
 output "subnet_aiqfome_service" {
-  value = google_compute_subnetwork.subnet_aiqfome_services_dev.self_link
+  value = google_compute_subnetwork.subnet_services.self_link
 }
 # # Create a google vpc subnet
-resource "google_compute_subnetwork" "subnet_aiqfome_application_dev" {
-    name          = "${var.subnet_aiqfome_application}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_aiqfome_range_application}"
-    network       = google_compute_network.vpc_network_aiqfome_dev.self_link
+resource "google_compute_subnetwork" "subnet_application" {
+    name          = "${var.service_project_id}-${var.application_vpc_name}-${var.env}"
+    project       = "${var.host_project_id}"
+    ip_cidr_range = "${var.subnet_cidr_application_range}"
+    network       = google_compute_network.vpc_shared_network.self_link
     region        = "${var.region_id}"
 
-  depends_on = [ google_compute_network.vpc_network_aiqfome_dev ]
+  depends_on = [ google_compute_network.vpc_shared_network ]
 }
 output "subnet_aiqfome_application" {
-  value = google_compute_subnetwork.subnet_aiqfome_application_dev.self_link
+  value = google_compute_subnetwork.subnet_application.self_link
 }
 
-########################################################
-# Create a Public subnet in the aiqentrega VPC Network #
-########################################################
-# # Create a google vpc subnet
-resource "google_compute_subnetwork" "vpc_subnet_aiqentrega_services_dev" {
-    name          = "${var.subnet_aiqentrega_service}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_aiqentrega_range_service}"
-    network       = google_compute_network.vpc_network_aiqentrega_dev.self_link
-    region        = "${var.region_id}"
+###################################
+# Create a VPC Subnetwork for GKE #
+###################################
+resource "google_compute_subnetwork" "gke_subnet_services" {
+  name = "${var.service_project_id}-${var.subnet_cluster_name}-${var.env}"
+  project = "${var.host_project_id}"
+  private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS"
+  purpose = "PRIVATE"
 
-  depends_on = [ google_compute_network.vpc_network_aiqentrega_dev ]
-}
-output "subnet_aiqentrega_service" {
-  value = google_compute_subnetwork.vpc_subnet_aiqentrega_services_dev.name
-}
-# # Create a google vpc subnet
-resource "google_compute_subnetwork" "vpc_subnet_aiqentrega_application_dev" {
-    name          = "${var.subnet_aiqentrega_application}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_aiqentrega_range_application}"
-    network       = google_compute_network.vpc_network_aiqentrega_dev.self_link
-    region        = "${var.region_id}"
+  ip_cidr_range = var.subnet_cidr_cluster_range_primary
+  region        = var.region_id
 
-  depends_on = [ google_compute_network.vpc_network_aiqentrega_dev ]
-}
-output "subnet_aiqentrega_application" {
-  value = google_compute_subnetwork.vpc_subnet_aiqentrega_application_dev.self_link
-}
+  stack_type       = "IPV4_ONLY"
 
-##########################################################
-# Create a Public subnet in the plusdelivery VPC Network #
-##########################################################
-# # Create a google vpc subnet
-resource "google_compute_subnetwork" "vpc_subnet_plusdelivery_services_dev" {
-    name          = "${var.subnet_plusdelivery_service}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_plusdelivery_range_service}"
-    network       = google_compute_network.vpc_network_plusdelivery_dev.self_link
-    region        = "${var.region_id}"
+  network       = google_compute_network.vpc_shared_network.self_link
+  secondary_ip_range {
+    range_name    = "services-range"
+    ip_cidr_range = var.subnet_cidr_cluster_range_secondary_services
+  }
 
-  depends_on = [ google_compute_network.vpc_network_plusdelivery_dev ]
+  secondary_ip_range {
+    range_name    = "pod-range"
+    ip_cidr_range = var.subnet_cidr_cluster_range_secondary_pods
+  }
 }
-output "subnet_plusdelivery_service" {
-  value = google_compute_subnetwork.vpc_subnet_plusdelivery_services_dev.name
+output "gke_subnet_services" {
+  value = google_compute_subnetwork.gke_subnet_services.self_link
 }
-# # Create a google vpc subnet
-resource "google_compute_subnetwork" "vpc_subnet_plusdelivery_application_dev" {
-    name          = "${var.subnet_plusdelivery_application}-${var.env}"
-    project       = local.aiqfome_host_project.host_project_name
-    ip_cidr_range = "${var.subnet_cidr_plusdelivery_range_application}"
-    network       = google_compute_network.vpc_network_plusdelivery_dev.self_link
-    region        = "${var.region_id}"
-
-  depends_on = [ google_compute_network.vpc_network_plusdelivery_dev ]
+output "gke_subnet_services_id" {
+  value = google_compute_subnetwork.gke_subnet_services.id
 }
-output "subnet_plusdelivery_application" {
-  value = google_compute_subnetwork.vpc_subnet_plusdelivery_application_dev.self_link
+output "gke_vpc_subnet_service_range" {
+  value = google_compute_subnetwork.gke_subnet_services.secondary_ip_range[0].range_name
 }
-
-########################################################
-# Create a Output Files to reuse generated information #
-########################################################
-resource "local_file" "export_subnet" {
-  content = jsonencode({
-    subnet_aiqfome_service = google_compute_subnetwork.subnet_aiqfome_services_dev.self_link
-    subnet_aiqfome_application = google_compute_subnetwork.subnet_aiqfome_application_dev.self_link
-    subnet_aiqentrega_service = google_compute_subnetwork.vpc_subnet_aiqentrega_services_dev.self_link
-    subnet_aiqentrega_application = google_compute_subnetwork.vpc_subnet_aiqentrega_application_dev.self_link
-    subnet_plusdelivery_service = google_compute_subnetwork.vpc_subnet_plusdelivery_services_dev.self_link
-    subnet_plusdelivery_application = google_compute_subnetwork.vpc_subnet_plusdelivery_application_dev.self_link
-  })
-  filename = "../local/subnet.json"
+output "gke_vpc_subnet_pod_range" {
+  value = google_compute_subnetwork.gke_subnet_services.secondary_ip_range[1].range_name
 }
