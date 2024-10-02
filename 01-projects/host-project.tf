@@ -1,46 +1,41 @@
-resource "google_project" "aiqentrega_project_dev" {
+resource "google_project" "host_project" {
   auto_create_network = false
   # org_id              = "${var.org_id}"
   billing_account     = "${var.billing_account}"
   folder_id = "351671931898"
   # folder_id           = "${var.folder_aiqentrega_id}"
-  name                = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"
-  project_id          = "${var.aiqentrega_project_id}-${var.env}-${random_id.name_suffix.hex}"
+  name                = "${var.host_project_id}-${var.env}-${random_id.name_suffix.hex}"
+  project_id          = "${var.host_project_id}-${var.env}-${random_id.name_suffix.hex}"
   deletion_policy = "DELETE"
 }
 
 output "aiqentrega_project_id" {
-  value = "${google_project.aiqentrega_project_dev.id}"
+  value = "${google_project.host_project.id}"
 }
 output "aiqentrega_host_project_name" {
-  value = "${google_project.aiqentrega_project_dev.name}"
+  value = "${google_project.host_project.name}"
 }
-# output "aiqentrega_project_number" {
-#   value = "${google_project.aiqentrega_project_dev.number}"
+output "host_project_number" {
+  value = "${google_project.host_project.number}"
+}
+
+# ########################################################
+# # Create a Output Files to reuse generated information #
+# ########################################################
+# resource "local_file" "export_subnet" {
+#   content = jsonencode({
+#     host_project = {
+#       name = google_project.host_project.name,
+#       id = google_project.host_project.id,
+#       number = google_project.host_project.number,
+#       }
+#   })
+#     filename = "../01_projects.json"
 # }
-
-########################################################
-# Create a Output Files to reuse generated information #
-########################################################
-resource "local_file" "aiqentrega_project" {
-  content = jsonencode({
-    aiqentrega_project_id = google_project.aiqentrega_project_dev.id
-    aiqentrega_project_name = google_project.aiqentrega_project_dev.name
-    # aiqentraga_project_number = google_project.aiqentrega_project_dev.number
-
-  })
-  filename = "../local/aiqentrega_project.json"
-}
 
 ################################
 # Enable the required services #
 ################################
-# # Enable Kubernetes Engine API
-# resource "google_project_service" "kubernetes_google_api_aiqentrega_dev" {
-#   project = google_project.aiqentrega_project_dev.name
-#   service = "kubernetes.googleapis.com"
-#   disable_on_destroy = false
-# }
 # Enable Compute Engine API
 resource "google_project_service" "compute_google_api_aiqentrega_dev" {
   project = google_project.aiqentrega_project_dev.name
