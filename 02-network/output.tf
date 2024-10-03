@@ -22,6 +22,13 @@ resource "local_file" "export_network" {
         name = google_compute_subnetwork.gke_subnet_services.name,
         id = google_compute_subnetwork.gke_subnet_services.id,
         self_link = google_compute_subnetwork.gke_subnet_services.self_link,
+        ip_cidr_range = google_compute_subnetwork.gke_subnet_services.ip_cidr_range,
+        secondary_ip_range = {
+            services_range = google_compute_subnetwork.gke_subnet_services.secondary_ip_range.0.ip_cidr_range,
+            services_range_name = google_compute_subnetwork.gke_subnet_services.secondary_ip_range[0].range_name,
+            pod_range = google_compute_subnetwork.gke_subnet_services.secondary_ip_range.1.ip_cidr_range,
+            pod_range_name = google_compute_subnetwork.gke_subnet_services.secondary_ip_range[1].range_name,
+            }
         }
     service_project_private_ip_address = {
         name = google_compute_global_address.service_project_private_ip_address.name,
@@ -34,5 +41,5 @@ resource "local_file" "export_network" {
         # self_link = google_service_networking_connection.service_private_vpc_connection.self_link
         }
   })
-    filename = "./02_network.json"
+    filename = "./network.json"
 }

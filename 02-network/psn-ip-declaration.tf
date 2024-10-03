@@ -6,7 +6,7 @@
 resource "google_compute_global_address" "service_project_private_ip_address" {
   provider = google-beta
 
-  project = "${var.host_project_id}"
+  project = local.projects.host_project.name
 
   name          = "${var.service_project_id}-private-ip-address-${var.env}"
   purpose       = "VPC_PEERING"

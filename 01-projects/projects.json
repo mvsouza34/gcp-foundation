@@ -1,0 +1,12 @@
+{
+    "host_project": {
+        "id": "projects/dt-sandbox-host-proj",
+        "name": "dt-sandbox-host-proj",
+        "number": "67931813644"
+    },
+    "service_project": {
+        "id": "projects/dt-sandbox-service-proj",
+        "name": "dt-sandbox-service-proj",
+        "number": "692159066307"
+    }
+}

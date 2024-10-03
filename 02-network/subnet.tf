@@ -1,10 +1,10 @@
 ######################################################
-# Create a Private subnet in the AiQFome VPC Network #
+# Create a Private subnet in the Template VPC Network #
 ######################################################
 # # Create a google vpc subnet
 resource "google_compute_subnetwork" "subnet_services" {
     name          = "${var.service_project_id}-${var.service_vpc_name}-${var.env}"
-    project       = "${var.host_project_id}"
+    project       = local.projects.host_project.name
     ip_cidr_range = "${var.subnet_cidr_service_range}"
     network       = google_compute_network.vpc_shared_network.self_link
     region        = "${var.region_id}"
@@ -17,7 +17,7 @@ output "subnet_aiqfome_service" {
 # # Create a google vpc subnet
 resource "google_compute_subnetwork" "subnet_application" {
     name          = "${var.service_project_id}-${var.application_vpc_name}-${var.env}"
-    project       = "${var.host_project_id}"
+    project       = local.projects.host_project.name
     ip_cidr_range = "${var.subnet_cidr_application_range}"
     network       = google_compute_network.vpc_shared_network.self_link
     region        = "${var.region_id}"
@@ -33,7 +33,7 @@ output "subnet_aiqfome_application" {
 ###################################
 resource "google_compute_subnetwork" "gke_subnet_services" {
   name = "${var.service_project_id}-${var.subnet_cluster_name}-${var.env}"
-  project = "${var.host_project_id}"
+  project = local.projects.host_project.name
   private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS"
   purpose = "PRIVATE"
 

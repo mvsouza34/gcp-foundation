@@ -13,7 +13,7 @@ terraform {
 
 locals {
     # Projects
-    
+    projects = jsondecode(file("../01-projects/projects.json"))
     }
 
 # Configure the Google Cloud Provider

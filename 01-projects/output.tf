@@ -14,5 +14,5 @@ resource "local_file" "export_subnet" {
       number = google_project.service_project.number,
       }
   })
-    filename = "../01_projects.json"
+    filename = "./projects.json"
 }

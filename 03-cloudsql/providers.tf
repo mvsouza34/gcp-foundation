@@ -13,16 +13,9 @@ terraform {
 
 locals {
     # Projects
-    # aiqentrega_project = jsondecode(file("../local/aiqentrega_project.json"))
-    # aiqfome_host_project = jsondecode(file("../local/aiqfome_host_project.json"))
-    # aiqfome_project = jsondecode(file("../local/aiqfome_project.json"))
-    # aiqfome_shared_project = jsondecode(file("../local/aiqfome_shared_proj.json"))
-    # plusdelivery_project = jsondecode(file("../local/plusdelivery_project.json"))
+    projects = jsondecode(file("../01-projects/projects.json"))
     # Networks
-    network = jsondecode(file("../02-network/02_network.json"))
-    # # Subnets
-    # subnets = jsondecode(file("../local/subnet.json"))
-    # gke_vpc = jsondecode(file("../local/gke_vpc.json"))
+    network = jsondecode(file("../02-network/network.json"))
 }
 
 # Configure the Google Cloud Provider

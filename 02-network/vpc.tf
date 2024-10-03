@@ -4,7 +4,7 @@
 # Create a google vpc network
 resource "google_compute_network" "vpc_shared_network" {
     name                    = "${var.service_project_id}-shared-vpc"
-    project                 = "${var.host_project_id}"
+    project                 = local.projects.host_project.name
   # ipv4_range              = "10.65.0.0/16"
     auto_create_subnetworks = false
 }

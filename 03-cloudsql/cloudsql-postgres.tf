@@ -1,19 +1,20 @@
-resource "google_sql_database_instance" "service_mysql_instance" {
+resource "google_sql_database_instance" "postgres_to_delete" {
   provider = google-beta
   project = local.projects.service_project.name
 
-  name             = "${var.service_project_id}-mysql-instance-${var.env}"
-  region           = var.region_id
-  database_version = "MYSQL_8_4"
+  name                = "${var.service_project_id}-postgres-instance-${var.env}"
+  region              = var.region_id
+  database_version    = "POSTGRES_16"
 
-  instance_type = "CLOUD_SQL_INSTANCE"
+  instance_type       = "CLOUD_SQL_INSTANCE"
+  
 
   settings {
     tier = "db-f1-micro"
     # tier = "db-custom-2-8192"
 
     pricing_plan = "PER_USE"
-
+  
     activation_policy = "ALWAYS"
     availability_type = "ZONAL"
 
@@ -23,10 +24,10 @@ resource "google_sql_database_instance" "service_mysql_instance" {
         retention_unit   = "COUNT"
       }
       enabled                        = false
-      # # location                       = "us"
-      # point_in_time_recovery_enabled = false
-      # start_time                     = "20:00"
-      # transaction_log_retention_days = 7
+    #   location                       = "us"
+    #   point_in_time_recovery_enabled = false
+    #   start_time                     = "20:00"
+    #   transaction_log_retention_days = 7
     }
 
     connector_enforcement = "NOT_REQUIRED"
@@ -37,10 +38,10 @@ resource "google_sql_database_instance" "service_mysql_instance" {
     edition               = "ENTERPRISE"
 
     ip_configuration {
-      ipv4_enabled = true
+      ipv4_enabled       = true
       allocated_ip_range = local.network.service_project_private_ip_address.name
-
-      private_network = local.network.service_private_vpc_connection.network
+      
+      private_network    = local.network.service_private_vpc_connection.network
       enable_private_path_for_google_cloud_services = true
 
       authorized_networks {
