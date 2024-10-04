@@ -15,7 +15,7 @@ locals {
     # Projects
     projects = jsondecode(file("../01-projects/projects.json"))
     # Networks
-    network = jsondecode(file("../02-network/network.json"))
+    # network = jsondecode(file("../02-network/network.json"))
 }
 
 # Configure the Google Cloud Provider
