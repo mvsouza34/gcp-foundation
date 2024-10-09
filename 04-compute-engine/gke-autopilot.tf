@@ -1,7 +1,15 @@
+# ###################################
+# # Store backend state in a bucket #
+# ###################################
+terraform {
+  backend "gcs" {
+    bucket = "allostech-digital-dev-bucket"
+  }
+}
+
 # ##################################
 # # Create a GKE AutoPilot Cluster #
 # ##################################
-
 
 locals {
   cluster_type           = "dev-autopilot-private"
@@ -47,11 +55,5 @@ module "gke" {
 
   depends_on = [ 
     module.projects_iam_bindings
-  # google_project_iam_member.host-proj-security-admin,
-  # google_project_iam_member.host-proj-network-user,
-  # google_project_iam_member.host-proj-k8s-agent-user,
-  # google_project_iam_member.host-proj-k8s-agent,
-  # google_project_iam_member.service-proj-k8s-agent,
-  # google_project_iam_member.service-proj-k8s-svc-acc-usr
                ]
  }
