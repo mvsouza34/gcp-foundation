@@ -1,61 +1,31 @@
-############################################
-# Credentials file for the service account #
-############################################
-variable "org_id" {
-  description = "The organization ID"
+#######################################################
+# Set the Projects IDs for the different environments #
+#######################################################
+variable "service_project_id" {
+    description = "The ID for all the Digital Resources"
+    type = string
+}
+variable "service_project_num" {
+  description = "Project number"
+  type = string
+}
+variable "host_project_id" {
+  description = "The ID of the app host project"
   type        = string
 }
-###########################################
-# Declarate information to Project Create #
-###########################################
-variable "billing_account" {
-  description = "The billing account ID"
-  type        = string
+variable "host_project_num" {
+  description = "Host project number"
+  type = string
 }
-variable "shared_folder_id" {
-  description = "The ID of the shared network folder"
-  type        = string
-}
-variable "environment_folder_id" {
-  description = "The ID of the environment folder"
-  type        = string
-}
-variable "project_folder_id" {
-  description = "The ID of the app folder"
-  type        = string
-}
+
 ########################
 # Define Enviroment ID #
 ########################
 variable "env" {
   description = "The name of the environment"
   type        = string
- }
-#######################################################
-# Set the Projects IDs for the different environments #
-#######################################################
-variable "host_project_id" {
-  description = "The ID of the app project"
-  type        = string
 }
-variable "service_project_id" {
-  description = "The ID of the private project"
-  type        = string
-}
-###########################
-# Define the machine type #
-###########################
-variable "machine_type" {
-  description = "The machine type"
-  type        = string
-}
-########################
-# Define default image #
-########################
-variable "linux_image" {
-  description = "The default image"
-  type        = string
-}
+
 ################################################
 # Define the region and zone for the resources #
 ################################################
@@ -67,81 +37,48 @@ variable "zone_01_id" {
   description = "The zone for the resources"
   type        = string
 }
-variable "zone_02_id" {
-  description = "The zone for the resources"
-  type        = string
-}
-variable "zone_03_id" {
-  description = "The zone for the resources"
-  type        = string
-}
+
 ########################################
 # Define the network and subnets names #
 ########################################
-# Link to IP distribuition list https://docs.google.com/spreadsheets/d/1Jtw4-wJaHHsyIf31eghvgcwIYUr_HuJy/edit?usp=sharing&ouid=100727001565538824661&rtpof=true&sd=true
-##########################################
-# Private Network Cluster VPC and Subnet #
-##########################################
-################################################################################
-# Cluster network
-variable "service_vpc_name" {
-  description = "The name of the network"
-  type        = string
-}
-variable "application_vpc_name" {
-  description = "The name of the network"
-  type        = string
-}
-#############################
-# Default Project CIRDs #
-variable "subnet_cidr_service_range" {
-  description = "The CIDR of the service subnet"
-  type        = string
-}
-variable "subnet_cidr_application_range" {
-  description = "The CIDR of the application subnet"
-  type        = string
-}
-################################################################################
-# Cluster subnets
-variable "subnet_cluster_name" {
-  description = "The name of the service subnet"
-  type        = string
-}
-variable "subnet_cidr_environment" {
-  description = "The CIDR of the service subnet"
-  type        = string
-}
-############################################################################
-# Cluster subnets CIDR
-variable "subnet_cidr_cluster_range_control" {
-  description = "The CIDR of the service subnet"
-  type        = string
-}
-variable "subnet_cidr_cluster_range_primary" {
-  description = "The CIDR of the service subnet"
-  type        = string
-}
-variable "subnet_cidr_cluster_range_secondary_services" {
-  description = "The CIDR of the application subnet"
-  type        = string
-}
-variable "subnet_cidr_cluster_range_secondary_pods" {
-  description = "The Secondary CIDR to Cluster"
+variable "dev_vpc" {
+  description = "The dev vpc path"
   type = string
 }
-variable "subnet_cidr_cluster_range_redis" {
-  description = "The CIDR of the service subnet"
-  type        = string
+
+variable "dev_sub" {
+  description = "The dev sub path"
+  type = string
 }
-############################################################################
-# Cluster Private Connection subnet CIDR
-variable "subnet_cidr_private_ip_address" {
-  description = "The CIDR of the private IP address"
-  type        = string
+
+#########################
+# Database's properties #
+#########################
+variable "database_name_preffix" {
+  description = "The cluster name preffix"
+  type = string
 }
-# Private Connection subnet mask length
-variable "ip_mask_length_private_ip_address" {
-  description = "The mask length of the private IP address"
-  type        = string
+variable "database_tier" {
+  description = "Instance family"
+  type = string
+}
+variable "database_version" {
+  description = "Database's version"
+  type = string
+}
+variable "cloudsql_mysql_sa" {
+  description = "Cloud SQL Service Account"
+  type = string
+}
+variable "cloudsql_mysql_email" {
+  description = "User Cloud SQL E-mail"
+  type = string
+}
+variable "cloudsql_mysql_dbadmin_email" {
+  description = "Cloud SQL Service DB Admin's E-mail"
+  type = string
+}
+variable "cloudsql_mysql_dbadmin_email_id" {
+  description = "DB Admin E-mail's ID"
+  type = string
 }
